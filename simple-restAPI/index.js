@@ -40,9 +40,8 @@ server.post("/userById/:id", (req, res) => {
 // delete user by id
 server.delete("/delete/:id", (req, res) => {
   database.filter((item) => item.id !== +req.params.id);
-  console.log(database);
   //   console.log(id);
-  //   database.splice(id, 1);
+  database.splice(id, 1);
   res.status(200).send(database);
 });
 
