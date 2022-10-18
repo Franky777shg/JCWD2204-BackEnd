@@ -6,12 +6,12 @@ server.use(express.json());
 
 let database = [
   {
-    id: 0,
+    id: 5,
     name: "Budi",
     age: 12,
   },
   {
-    id: 1,
+    id: 6,
     name: "Anna",
     age: 14,
   },
@@ -27,8 +27,16 @@ server.post("/register", (req, res) => {
   res.status(200).send(database);
 });
 
-// get all user
-// get user by id
+server.get("/all-user", (req, res) => {
+  res.status(200).send(database);
+});
+
+server.post("/userById/:id", (req, res) => {
+  //   console.log(req.params.id);
+  let result = database.filter((item) => item.id === +req.params.id);
+  res.status(200).send(result[0]);
+});
+
 // delete user by id
 // edit user by id
 
