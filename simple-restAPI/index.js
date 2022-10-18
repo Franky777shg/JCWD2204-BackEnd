@@ -19,7 +19,10 @@ const server = http.createServer(async (req, res) => {
   } else if (req.url === "/home" && req.method === "POST") {
     res.writeHead(200, { "content-type": "text/html" });
     res.end("<h1>Welcome to my API</h1>");
-  } else if ((req.url = "/register" && req.method === "POST")) {
+  } else if (req.url === "/all-user" && req.method === "GET") {
+    res.writeHead(200);
+    res.end(JSON.stringify(database));
+  } else if (req.url === "/register" && req.method === "POST") {
     let data;
     req
       .on("data", (chunk) => {
@@ -33,6 +36,26 @@ const server = http.createServer(async (req, res) => {
         console.log(database);
         res.writeHead(200, { "content-type": "application/json" });
         res.end(JSON.stringify(database));
+      });
+  } else if (req.url === "/login" && req.method === "POST") {
+    let data;
+    req
+      .on("data", (chunk) => {
+        // console.log(chunk);
+        data = chunk.toString();
+      })
+      .on("end", () => {
+        // console.log(data);
+        let objUser = JSON.parse(data);
+        let idUser = database.findIndex((item) => item.name === objUser.name);
+        // console.log(idUser);
+        if (idUser !== -1) {
+          res.writeHead(200, { "content-type": "application/json" });
+          res.end(JSON.stringify(database[idUser]));
+        } else {
+          res.writeHead(200, { "content-type": "application/json" });
+          res.end("Gagal Login");
+        }
       });
   } else {
     res.writeHead(400, { "content-type": "text/plain" });
