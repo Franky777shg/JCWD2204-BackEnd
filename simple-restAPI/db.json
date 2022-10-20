@@ -1,0 +1,4 @@
+[
+  { "id": 0, "name": "beli cimol", "nominal": 5000, "category": "makan" },
+  { "id": 1, "name": "beli batagor", "nominal": 6000, "category": "makan" }
+]

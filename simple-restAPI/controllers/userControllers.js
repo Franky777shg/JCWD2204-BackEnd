@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 let database = [
   {
     id: 5,
@@ -38,5 +40,25 @@ module.exports = {
       }
     }
     res.status(200).send(database);
+  },
+  getExpense: (req, res) => {
+    const data = fs.readFileSync("./db.json", "utf-8");
+    console.log(data);
+    res.status(200).send("test");
+  },
+  writeExpense: (req, res) => {
+    const data = fs.readFileSync("./db.json", "utf-8");
+    console.log(data);
+    const oldData = JSON.parse(data);
+    console.log(oldData);
+    oldData.push({
+      id: 1,
+      name: "beli batagor",
+      nominal: 6000,
+      category: "makan",
+    });
+    console.log(oldData);
+    fs.writeFileSync("./db.json", JSON.stringify(oldData), "utf-8");
+    res.status(200).send("test");
   },
 };
