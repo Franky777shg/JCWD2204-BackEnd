@@ -1,18 +1,58 @@
 [
-  { "id": 0, "name": "beli cimol", "nominal": 5000, "category": "makan" },
+  {
+    "id": 0,
+    "name": "beli cimol",
+    "nominal": 5000,
+    "category": "makan",
+    "date": "19-10-2022"
+  },
   {
     "id": 1,
     "name": "bayar mrt",
     "nominal": 15000,
-    "category": "transportasi"
+    "category": "transportasi",
+    "date": "20-10-2022"
   },
-  { "name": "zakat", "nominal": 2000000, "category": "sedekah", "id": 3 },
-  { "name": "nonton", "nominal": 50000, "category": "hiburan", "id": 4 },
+  {
+    "name": "zakat",
+    "nominal": 2000000,
+    "category": "sedekah",
+    "date": "19-10-2022",
+    "id": 3
+  },
+  {
+    "name": "nonton",
+    "nominal": 50000,
+    "category": "hiburan",
+    "date": "20-10-2022",
+    "id": 4
+  },
   {
     "name": "sumbangan masjid oleh hamba Allah",
     "nominal": 10000000,
     "category": "sedekah",
+    "date": "19-10-2022",
     "id": 5
   },
-  { "name": "persembahan", "nominal": 10000000, "category": "sedekah", "id": 6 }
+  {
+    "name": "persembahan",
+    "nominal": 10000000,
+    "category": "sedekah",
+    "date": "20-10-2022",
+    "id": 6
+  },
+  {
+    "name": "naik jet",
+    "nominal": 20000000,
+    "category": "hiburan",
+    "id": 7,
+    "date": "20-10-2022"
+  },
+  {
+    "name": "nonton konser",
+    "nominal": 1500000,
+    "category": "hiburan",
+    "id": 8,
+    "date": "20-10-2022"
+  }
 ]

@@ -1,38 +1,44 @@
 const fs = require("fs");
 
+const getData = () => {
+  return JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+};
+
 module.exports = {
   allExpense: (req, res) => {
-    const data = fs.readFileSync("./db.json", "utf-8");
-    res.status(200).send(JSON.parse(data));
+    const data = getData();
+    res.status(200).send(data);
   },
   createExpense: (req, res) => {
-    const data = fs.readFileSync("./db.json", "utf-8");
+    const data = getData();
 
-    const currentData = JSON.parse(data);
-
-    let listID = currentData.map((item) => item.id);
+    let listID = data.map((item) => item.id);
 
     let maxID = Math.max(...listID);
 
+    const date = new Date();
+
     req.body.id = maxID + 1;
 
-    currentData.push(req.body);
+    req.body.date = `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`;
 
-    fs.writeFileSync("./db.json", JSON.stringify(currentData), "utf-8");
+    data.push(req.body);
 
-    res.status(200).send(currentData);
+    fs.writeFileSync("./db.json", JSON.stringify(data), "utf-8");
+
+    res.status(200).send(data);
   },
   getById: (req, res) => {
-    const data = fs.readFileSync("./db.json", "utf-8");
+    const data = getData();
 
-    const currentData = JSON.parse(data);
-
-    let result = currentData.filter((item) => item.id === +req.params.id); // [{}]
+    let result = data.filter((item) => item.id === +req.params.id); // [{}]
 
     res.status(200).send(result[0]);
   },
   deleteById: (req, res) => {
-    const data = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+    const data = getData();
 
     const index = data.findIndex((item) => item.id === +req.params.id);
 
@@ -43,7 +49,7 @@ module.exports = {
     res.status(200).send(data);
   },
   editById: (req, res) => {
-    const data = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+    const data = getData();
 
     const user = data.filter((item) => item.id === +req.params.id)[0];
 
@@ -57,10 +63,16 @@ module.exports = {
 
     res.status(200).send(data);
   },
-  totalByCate: (req, res) => {
-    const data = JSON.parse(fs.readFileSync("./db.json", "utf-8"));
+  total: (req, res) => {
+    const data = getData();
 
-    let result = data.filter((item) => item.category === req.query.category);
+    let result;
+
+    if (req.query.category) {
+      result = data.filter((item) => item.category === req.query.category);
+    } else if (req.query.date) {
+      result = data.filter((item) => item.date === req.query.date);
+    }
 
     let total = result.map((item) => item.nominal).reduce((a, b) => a + b);
 

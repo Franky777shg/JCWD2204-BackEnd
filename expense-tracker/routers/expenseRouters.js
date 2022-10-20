@@ -7,6 +7,6 @@ router.get("/:id", expense.getById);
 router.post("/create", expense.createExpense);
 router.delete("/:id", expense.deleteById);
 router.patch("/:id", expense.editById);
-router.post("/total", expense.totalByCate);
+router.post("/total", expense.total);
 
 module.exports = router;
