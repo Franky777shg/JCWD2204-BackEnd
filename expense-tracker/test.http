@@ -1,0 +1,2 @@
+get http://localhost:2000/expense/all
+

@@ -1,8 +1,18 @@
 [
+  { "id": 0, "name": "beli cimol", "nominal": 5000, "category": "makan" },
   {
-    "id": 0,
-    "name": "beli cimol",
-    "nominal": 5000,
-    "category": "makan"
-  }
+    "id": 1,
+    "name": "bayar mrt",
+    "nominal": 15000,
+    "category": "transportasi"
+  },
+  { "name": "zakat", "nominal": 2000000, "category": "sedekah", "id": 3 },
+  { "name": "nonton", "nominal": 50000, "category": "hiburan", "id": 4 },
+  {
+    "name": "sumbangan masjid oleh hamba Allah",
+    "nominal": 10000000,
+    "category": "sedekah",
+    "id": 5
+  },
+  { "name": "persembahan", "nominal": 10000000, "category": "sedekah", "id": 6 }
 ]
