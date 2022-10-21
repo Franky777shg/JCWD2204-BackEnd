@@ -8,6 +8,13 @@ server.get("/", (req, res) => {
   res.status(200).send("<h1>Welcome to my API</h1>");
 });
 
+const db = require("./database");
+
+db.connect((err) => {
+  if (err) console.log(err);
+  else console.log(`Success connect to mysql with ID: ${db.threadId}`);
+});
+
 const { user } = require("./routers");
 server.use("/user", user);
 
