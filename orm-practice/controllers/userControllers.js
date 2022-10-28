@@ -48,4 +48,49 @@ module.exports = {
       res.status(400).send(err);
     }
   },
+  getUserInSomeCity: async (req, res) => {
+    try {
+      const users = await db.City.findAll({
+        include: db.User,
+        where: {
+          city: req.query.city,
+        },
+      });
+      res.status(200).send(users);
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+  },
+  transactionExample: async (req, res) => {
+    try {
+      const { username, email, password, age, CityId, city, zipCode } =
+        req.body;
+      await db.sequelize.transaction(async (t) => {
+        await db.User.create(
+          {
+            username,
+            email,
+            password,
+            age,
+            CityId,
+          },
+          { transaction: t }
+        );
+
+        await db.City.create(
+          {
+            city,
+            zipCode,
+          },
+          { transaction: t }
+        );
+      });
+
+      res.status(200).send("Success Transaction");
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+  },
 };
