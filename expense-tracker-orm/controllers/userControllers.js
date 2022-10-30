@@ -8,14 +8,31 @@ module.exports = {
         req.body;
       if (password !== password_confirmation)
         throw "Password doesnt match with confirm password";
-      const result = await db.User.create({
-        email,
-        username,
-        phone_number,
-        password,
+
+      await db.sequelize.transaction(async (transaction) => {
+        const createUser = await db.User.create(
+          {
+            email,
+            username,
+            phone_number,
+            password,
+          },
+          {
+            transaction,
+          }
+        );
+
+        await db.Profile.create(
+          {
+            UserId: createUser.id,
+          },
+          {
+            transaction,
+          }
+        );
       });
 
-      res.status(200).send(result);
+      res.status(200).send("Success Register");
     } catch (err) {
       console.log(err);
       res.status(400).send(err);
@@ -38,6 +55,21 @@ module.exports = {
       });
       if (result.length === 0) throw "Data doesnt match";
       res.status(200).send(result[0].dataValues);
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+  },
+  updateProfile: async (req, res) => {
+    try {
+      // const { gender, birth_date, occupation, currency } = req.body;
+
+      await db.Profile.update(req.body, {
+        where: {
+          id: req.params.id,
+        },
+      });
+      res.status(200).send("Success Update");
     } catch (err) {
       console.log(err);
       res.status(400).send(err);

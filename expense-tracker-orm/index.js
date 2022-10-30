@@ -9,8 +9,9 @@ server.get("/", (req, res) => {
   res.status(200).send("Welcome to my API");
 });
 
-const { user } = require("./routers");
+const { user, expense } = require("./routers");
 server.use("/users", user);
+server.use("/expenses", expense);
 
 server.listen(PORT, () => {
   // db.sequelize.sync({ alter: true });
