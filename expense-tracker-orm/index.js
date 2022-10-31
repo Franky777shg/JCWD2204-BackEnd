@@ -5,13 +5,8 @@ const db = require("./models");
 
 server.use(express.json());
 
-server.get("/", (req, res) => {
-  res.status(200).send("Welcome to my API");
-});
-
-const { user, expense } = require("./routers");
-server.use("/users", user);
-server.use("/expenses", expense);
+const { authRoutes } = require("./routers");
+server.use("/auth", authRoutes);
 
 server.listen(PORT, () => {
   // db.sequelize.sync({ alter: true });

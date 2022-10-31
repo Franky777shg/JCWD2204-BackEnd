@@ -1,7 +1,5 @@
-const user = require("./userControllers");
-const expense = require("./expenseControllers");
+const authControllers = require("./auth");
 
 module.exports = {
-  user,
-  expense,
+  authControllers,
 };
