@@ -9,6 +9,6 @@ const { user } = require("./routers");
 server.use("/users", user);
 
 server.listen(PORT, () => {
-  //   db.sequelize.sync({ alter: true });
+  // db.sequelize.sync({ alter: true });
   console.log("Success Running at PORT: " + PORT);
 });

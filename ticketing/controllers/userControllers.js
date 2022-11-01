@@ -2,7 +2,9 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const user = db.User;
 const event = db.Event;
-const { Op } = require("sequelize");
+const transaction = db.Transaction;
+const transactionDetail = db.TransactionDetail;
+const { Op, Transaction } = require("sequelize");
 
 module.exports = {
   register: async (req, res) => {
@@ -120,26 +122,52 @@ module.exports = {
     }
   },
   buyTicket: async (req, res) => {
-    try {
-      const { userId, listEvent } = req.body;
-
-      let obj = {};
-
-      const avail = listEvent.every(async (item) => {
-        const availability = await event.findOne({
-          where: {
-            id: item,
-          },
-        });
-
-        return availability.quota !== 0;
-      });
-
-      console.log(avail);
-
-      res.status(200).send("Buy Ticket Success");
-    } catch (err) {
-      res.status(400).send(err);
-    }
+    // try {
+    //   const { userId, listEvent } = req.body;
+    //   let totalPrice = 0;
+    //   let listQuota = []
+    //   for (let item of listEvent) {
+    //     const availability = await event.findOne({
+    //       where: {
+    //         id: item,
+    //       },
+    //       raw: true,
+    //     });
+    //     if (availability.quota === 0) {
+    //       throw `${availability.name} is Sold Out`;
+    //     }
+    //     totalPrice += availability.price;
+    //     listQuota.push(availability.quota)
+    //   }
+    //   //   console.log(totalPrice);
+    //   const result = await Transaction(async (t) => {
+    //     const trans = await transaction.create(
+    //       {
+    //         totalPrice,
+    //         UserId: userId,
+    //       },
+    //       { transaction: t }
+    //     );
+    //     for (let item of listEvent) {
+    //       await transactionDetail.create(
+    //         { EventId: item, TransactionId: trans.id },
+    //         { transaction: t }
+    //       );
+    //     }
+    //     for(let item of listEvent) {
+    //         await event.update({
+    //             quota:
+    //         },
+    //         {
+    //             where: {
+    //                 id: item
+    //             }
+    //         })
+    //     }
+    //   });
+    //   res.status(200).send("Buy Ticket Success");
+    // } catch (err) {
+    //   res.status(400).send(err);
+    // }
   },
 };
