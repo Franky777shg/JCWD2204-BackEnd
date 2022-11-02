@@ -4,6 +4,7 @@ const { user } = require("../controllers");
 
 router.post("/register", user.register);
 router.post("/login", user.login);
+router.get("/keepLogin", user.keepLogin);
 router.post("/buy", user.buyTicket);
 router.get("/events", user.viewAllEvent);
 router.get("/event-available", user.viewAvailableEvent);

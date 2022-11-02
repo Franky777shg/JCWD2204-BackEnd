@@ -5,15 +5,16 @@ const event = db.Event;
 const transaction = db.Transaction;
 const transactionDetail = db.TransactionDetail;
 const { Op } = require("sequelize");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
   register: async (req, res) => {
     try {
+      console.log(req.body);
       const { email, username, password, phoneNumber, confirmPassword } =
         req.body;
 
-      if (password !== confirmPassword)
-        throw "password doesnt match with confirm password";
+      if (password !== confirmPassword) throw "password lu salah";
 
       if (password.length < 8) throw "Password min 8 character";
 
@@ -35,17 +36,20 @@ module.exports = {
   },
   login: async (req, res) => {
     try {
-      const { email, username, password, phoneNumber } = req.body;
+      console.log(req.body);
+      const { data, password } = req.body;
 
       const isUserExist = await db.User.findOne({
         where: {
           [Op.or]: {
-            email: email ? email : "",
-            username: username ? username : "",
-            phoneNumber: phoneNumber ? phoneNumber : "",
+            email: data ? data : "",
+            username: data ? data : "",
+            phoneNumber: data ? data : "",
           },
         },
+        raw: true,
       });
+      console.log(isUserExist);
 
       if (isUserExist.loginAttempt >= 3) {
         await user.update(
@@ -89,10 +93,43 @@ module.exports = {
           }
         );
 
-        throw `Wrong Password ${isUserExist.loginAttempt} attempts`;
+        throw `Wrong Password ${isUserExist.loginAttempt + 1} attempts`;
       }
 
-      res.status(200).send(isUserExist);
+      const token = jwt.sign(
+        { username: isUserExist.username, id: isUserExist.id },
+        "jcwd2204"
+      );
+
+      res.status(200).send({
+        user: {
+          username: isUserExist.username,
+          id: isUserExist.id,
+        },
+        token,
+      });
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  },
+  keepLogin: async (req, res) => {
+    try {
+      console.log(req.headers.authorization);
+      const token = req.headers.authorization.split(" ")[1];
+      console.log(token);
+
+      const verify = jwt.verify(token, "jcwd2204");
+      console.log(verify);
+      const result = await user.findAll({
+        where: {
+          id: verify.id,
+        },
+      });
+
+      res.status(200).send({
+        id: result[0].id,
+        username: result[0].username,
+      });
     } catch (err) {
       res.status(400).send(err);
     }
