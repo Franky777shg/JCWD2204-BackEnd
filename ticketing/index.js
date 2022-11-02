@@ -6,6 +6,7 @@ const db = require("./models");
 
 server.use(express.json());
 server.use(cors());
+server.use(express.static("./Public"));
 
 const { user } = require("./routers");
 server.use("/users", user);

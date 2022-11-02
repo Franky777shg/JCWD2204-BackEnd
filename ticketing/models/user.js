@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      profilePic: DataTypes.STRING,
     },
     {
       sequelize,

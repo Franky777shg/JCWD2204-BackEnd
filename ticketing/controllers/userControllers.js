@@ -207,7 +207,34 @@ module.exports = {
     }
   },
   uploadFile: async (req, res) => {
-    let fileUploaded = req.files;
-    res.status(200).send("test");
+    try {
+      let fileUploaded = req.file;
+      console.log("controller", fileUploaded);
+
+      await user.update(
+        {
+          profilePic: fileUploaded.filename,
+        },
+        {
+          where: {
+            id: req.params.id,
+          },
+        }
+      );
+      const getUser = await user.findOne({
+        where: {
+          id: req.params.id,
+        },
+        raw: true,
+      });
+      res.status(200).send({
+        id: getUser.id,
+        username: getUser.username,
+        profilePic: getUser.profilePic,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
   },
 };

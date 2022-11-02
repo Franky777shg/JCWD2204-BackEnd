@@ -10,6 +10,10 @@ router.get("/keepLogin", user.keepLogin);
 router.post("/buy", user.buyTicket);
 router.get("/events", user.viewAllEvent);
 router.get("/event-available", user.viewAvailableEvent);
-router.post("/single-uploaded", multerUpload.single("file"), user.uploadFile);
+router.post(
+  "/single-uploaded/:id",
+  multerUpload.single("file"),
+  user.uploadFile
+);
 
 module.exports = router;
