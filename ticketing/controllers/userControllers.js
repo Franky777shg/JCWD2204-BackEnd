@@ -206,4 +206,8 @@ module.exports = {
       res.status(400).send(err);
     }
   },
+  uploadFile: async (req, res) => {
+    let fileUploaded = req.files;
+    res.status(200).send("test");
+  },
 };
