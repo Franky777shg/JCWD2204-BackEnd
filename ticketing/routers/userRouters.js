@@ -15,5 +15,6 @@ router.post(
   multerUpload.single("file"),
   user.uploadFile
 );
+router.get("/verification", user.verification);
 
 module.exports = router;

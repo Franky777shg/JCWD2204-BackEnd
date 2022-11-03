@@ -11,7 +11,7 @@ const transporter = require("../helpers/transporter");
 module.exports = {
   register: async (req, res) => {
     try {
-      console.log(req.body);
+      // console.log(req.body);
       const { email, username, password, phoneNumber, confirmPassword } =
         req.body;
 
@@ -23,18 +23,21 @@ module.exports = {
 
       const hashPass = await bcrypt.hash(password, salt);
 
-      await user.create({
+      const data = await user.create({
         username,
         email,
         phoneNumber,
         password: hashPass,
       });
+      // console.log(data.id);
+
+      const token = jwt.sign({ id: data.id }, "jcwd2204", { expiresIn: 30 });
 
       await transporter.sendMail({
         from: "Admin",
         to: email,
         subject: "Verification User",
-        html: "<h1>Nodemailer JCWD 2204</h1>",
+        html: `<a href="http://localhost:3000/verification/${token}" target="_blank">Click here to verify</a>`,
       });
 
       res.status(200).send("Register Success");
@@ -122,11 +125,7 @@ module.exports = {
   },
   keepLogin: async (req, res) => {
     try {
-      console.log(req.headers.authorization);
-      const token = req.headers.authorization.split(" ")[1];
-      console.log(token);
-
-      const verify = jwt.verify(token, "jcwd2204");
+      const verify = jwt.verify(req.token, "jcwd2204");
       console.log(verify);
       const result = await user.findAll({
         where: {
@@ -240,6 +239,27 @@ module.exports = {
         username: getUser.username,
         profilePic: getUser.profilePic,
       });
+    } catch (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+  },
+  verification: async (req, res) => {
+    try {
+      const verify = jwt.verify(req.token, "jcwd2204");
+      console.log(verify);
+
+      await user.update(
+        {
+          isVerified: true,
+        },
+        {
+          where: {
+            id: verify.id,
+          },
+        }
+      );
+      res.status(200).send("Success Verification");
     } catch (err) {
       console.log(err);
       res.status(400).send(err);
