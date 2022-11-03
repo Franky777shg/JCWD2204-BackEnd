@@ -7,6 +7,8 @@ const transactionDetail = db.TransactionDetail;
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const transporter = require("../helpers/transporter");
+const fs = require("fs");
+const handlebars = require("handlebars");
 
 module.exports = {
   register: async (req, res) => {
@@ -31,17 +33,25 @@ module.exports = {
       });
       // console.log(data.id);
 
-      const token = jwt.sign({ id: data.id }, "jcwd2204", { expiresIn: 30 });
+      const token = jwt.sign({ id: data.id }, "jcwd2204", { expiresIn: "1h" });
+
+      const tempEmail = fs.readFileSync("./template/email.html", "utf-8");
+      const tempCompile = await handlebars.compile(tempEmail);
+      const tempResult = tempCompile({
+        username,
+        link: `http://localhost:3000/verification/${token}`,
+      });
 
       await transporter.sendMail({
         from: "Admin",
         to: email,
         subject: "Verification User",
-        html: `<a href="http://localhost:3000/verification/${token}" target="_blank">Click here to verify</a>`,
+        html: tempResult,
       });
 
       res.status(200).send("Register Success");
     } catch (err) {
+      console.log(err);
       res.status(400).send(err);
     }
   },
