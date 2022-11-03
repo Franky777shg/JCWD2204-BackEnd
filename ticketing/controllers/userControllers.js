@@ -6,6 +6,7 @@ const transaction = db.Transaction;
 const transactionDetail = db.TransactionDetail;
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
+const transporter = require("../helpers/transporter");
 
 module.exports = {
   register: async (req, res) => {
@@ -27,6 +28,13 @@ module.exports = {
         email,
         phoneNumber,
         password: hashPass,
+      });
+
+      await transporter.sendMail({
+        from: "Admin",
+        to: email,
+        subject: "Verification User",
+        html: "<h1>Nodemailer JCWD 2204</h1>",
       });
 
       res.status(200).send("Register Success");

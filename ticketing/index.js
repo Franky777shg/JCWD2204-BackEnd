@@ -3,6 +3,7 @@ const cors = require("cors");
 const PORT = 2000;
 const server = express();
 const db = require("./models");
+require("dotenv").config();
 
 server.use(express.json());
 server.use(cors());
