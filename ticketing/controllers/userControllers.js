@@ -36,7 +36,7 @@ module.exports = {
       const token = jwt.sign({ id: data.id }, "jcwd2204", { expiresIn: "1h" });
 
       const tempEmail = fs.readFileSync("./template/email.html", "utf-8");
-      const tempCompile = await handlebars.compile(tempEmail);
+      const tempCompile = handlebars.compile(tempEmail);
       const tempResult = tempCompile({
         username,
         link: `http://localhost:3000/verification/${token}`,
